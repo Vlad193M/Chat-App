@@ -3,6 +3,7 @@ import classes from "./HeaderLayout.module.css";
 
 import { useEffect } from "react";
 import Header from "../../components/Header/Header";
+import Modal from "../../components/UI/Modal/Modal";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux-custom-hooks";
 import { watchAuthState } from "../../store/auth/auth-actions";
 
@@ -40,8 +41,8 @@ const HeaderLayout = () => {
   return (
     <div className="container">
       <Header />
-
       <Outlet />
+      {/* <Modal open={true} text="Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem" buttonText="Ok" ></Modal> */}
     </div>
   );
 };
