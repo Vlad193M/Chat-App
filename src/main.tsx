@@ -14,7 +14,7 @@ import SignUp from "./pages/SignUp/SignUp";
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <BrowserRouter>
-      {/* <StrictMode> */}
+      <StrictMode>
         <Routes>
           <Route element={<HeaderLayout />}>
             <Route index element={<HomePage />} />
@@ -24,7 +24,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="*" element={<Navigate to="/log-in" />} />
           </Route>
         </Routes>
-      {/* </StrictMode> */}
+      </StrictMode>
     </BrowserRouter>
   </Provider>
 );
