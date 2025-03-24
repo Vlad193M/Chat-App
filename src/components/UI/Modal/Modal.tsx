@@ -6,7 +6,7 @@ interface ModalProps {
   text: string;
   buttonText: string;
   open: boolean;
-  onClose?: React.ReactEventHandler<HTMLDialogElement>;
+  onClose?: () => void;
   className?: string;
 }
 
@@ -23,11 +23,9 @@ const Modal = ({
     const modal = dialogRef.current;
     if (open) {
       modal?.showModal();
-    }
-    
-    return () => {
+    } else {
       modal?.close();
-    };
+    }
   }, [open]);
 
   return createPortal(
