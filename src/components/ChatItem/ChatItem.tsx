@@ -3,7 +3,7 @@ import classes from "./ChatItem.module.css";
 interface ChatItemProps {
   chatId: string;
   selectedChatId: string | null;
-  name: string;
+  name: string | null;
   text: string;
   src: string;
   className?: string;

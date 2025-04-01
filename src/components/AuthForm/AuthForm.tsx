@@ -20,7 +20,6 @@ interface AuthFormProps {
   offerButtonText: string;
   offerLink: string;
 }
-
 const AuthForm = ({
   title,
   descriptions,

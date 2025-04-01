@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { ClipLoader } from "react-spinners";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux-custom-hooks";
 import {
@@ -9,6 +9,7 @@ import ChatHeader from "../ChatHeader/ChatHeader";
 import MessageInput from "../MessageInput/MessageInput";
 import MessageItem from "../UI/MessageItem/MessageItem";
 import classes from "./ChatArea.module.css";
+import defaultAvatar from "../../assets/default-avatar2.jpg";
 
 const ChatArea = ({ className = "" }) => {
   const dispatch = useAppDispatch();
@@ -21,12 +22,15 @@ const ChatArea = ({ className = "" }) => {
   );
   const chatId = useAppSelector((state) => state.chatMessages.chatId);
 
-  const currentChatData = chats.find((chat) => chat.chatId === chatId);
   const isDownloadedNewMessageRef = useRef(false);
-
   const firstMessageRef = useRef<HTMLLIElement>(null);
   const prevFirstMessageRef = useRef<HTMLLIElement>(null);
   const lastMessageRef = useRef<HTMLLIElement>(null);
+
+  const currentChatData = useMemo(
+    () => chats.find((chat) => chat.chatId === chatId),
+    [chatId]
+  );
 
   useEffect(() => {
     if (!chatId) return;
@@ -77,8 +81,9 @@ const ChatArea = ({ className = "" }) => {
       {chatId && (
         <>
           <ChatHeader
-            name={String(currentChatData?.userName)}
+            name={currentChatData?.name ?? "No one user selected"}
             description="lorem lorem lorem"
+            src={currentChatData?.photoURL ?? defaultAvatar}
           />
           <ClipLoader
             cssOverride={{
@@ -94,9 +99,9 @@ const ChatArea = ({ className = "" }) => {
             {messages.map((item, index) => {
               prevFirstMessageRef.current = firstMessageRef.current;
               return (
-                <MessageItem
+                <MessageIte
                   isSenderMessage={user?.uid !== item.senderId}
-                  key={item.createdAt}
+                  key={item.messageId + item.createdAt}
                   ref={
                     index === 0
                       ? firstMessageRef
