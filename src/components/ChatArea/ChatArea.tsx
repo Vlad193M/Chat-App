@@ -99,7 +99,7 @@ const ChatArea = ({ className = "" }) => {
             {messages.map((item, index) => {
               prevFirstMessageRef.current = firstMessageRef.current;
               return (
-                <MessageIte
+                <MessageItem
                   isSenderMessage={user?.uid !== item.senderId}
                   key={item.messageId + item.createdAt}
                   ref={

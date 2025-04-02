@@ -26,7 +26,7 @@ export type DirectChatType = {
 export type GroupChatType = {
   created: number;
   groupName: string;
-  photoURL: string;
+  photoURL: string | null;
   adminId: string;
   participants: string[];
 };

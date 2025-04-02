@@ -11,6 +11,7 @@ import {
 } from "../../store/chat-messages/chat-messages-slice";
 import { subscribeToUserChats } from "../../store/user-chats/user-chats-actions";
 import { ChatType } from "../../types/dbTypes";
+import ChatItemCheckbox from "../UI/ChatItemCheckbox/ChatItemCheckbox";
 import classes from "./ChatSidebar.module.css";
 
 interface ChatSidebarProps {
@@ -19,6 +20,8 @@ interface ChatSidebarProps {
 
 const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
   const [show, setShow] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
   const chats = useAppSelector((state) => state.userChats.chats);
   const chatsLoading = useAppSelector((state) => state.userChats.loading);
   const chatId = useAppSelector((state) => state.chatMessages.chatId);
@@ -47,9 +50,27 @@ const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
     dispatch(setChatType(chatType));
   };
 
+  const handleUserSelectForGroup = (participants: string[]) => {
+    if (!user) return;
+    const newUserId = participants.find((userId) => user.uid !== userId);
+    if (!newUserId) return;
+
+    setSelectedUsers((prev) => {
+      if (prev.includes(newUserId))
+        return prev.filter((id) => id !== newUserId);
+      else if (!prev.includes(newUserId)) return [...prev, newUserId];
+      else return prev;
+    });
+  };
+
   return (
     <aside className={`${classes.aside} ${className}`}>
-      <ChatHeader show={show} setShow={setShow} />
+      <ChatHeader
+        show={show}
+        setShow={setShow}
+        selectedUsers={selectedUsers}
+        setSelectedUsers={setSelectedUsers}
+      />
       <ClipLoader
         cssOverride={{
           position: "absolute",
@@ -61,19 +82,49 @@ const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
         loading={chatsLoading}
       />
       <ul className={classes.ul}>
-        {chats.map((chat) => (
-          <ChatItem
-            chatId={chat.chatId}
-            selectedChatId={chatId}
-            onClick={() => handleChatSelect(chat.chatId, chat.chatType)}
-            src={chat.photoURL ?? defaultAvatar}
-            name={chat.name}
-            text={chat.lastMessage}
-            updatedAt={chat.updatedAt}
-            className={classes.li}
-            key={chat.chatId}
-          />
-        ))}
+        {chats.map((chat) => {
+          if (show === "group" && chat.chatType === ChatType.DIRECT)
+            return (
+              <ChatItemCheckbox
+                key={chat.chatId}
+                onClick={() => handleUserSelectForGroup(chat.participants)}
+                isSelected={selectedUsers.includes(
+                  user
+                    ? chat.participants.find((userId) => user.uid !== userId) ||
+                        ""
+                    : ""
+                )}
+              >
+                <ChatItem
+                  chatId={chat.chatId}
+                  selectedChatId={chatId}
+                  src={chat.photoURL ?? defaultAvatar}
+                  name={chat.name}
+                  text={chat.lastMessage}
+                  updatedAt={chat.updatedAt}
+                  className={classes.li}
+                />
+              </ChatItemCheckbox>
+            );
+          else
+            return (
+              <ChatItem
+                chatId={chat.chatId}
+                selectedChatId={chatId}
+                onClick={
+                  !(show === "group")
+                    ? () => handleChatSelect(chat.chatId, chat.chatType)
+                    : undefined
+                }
+                src={chat.photoURL ?? defaultAvatar}
+                name={chat.name}
+                text={chat.lastMessage}
+                updatedAt={chat.updatedAt}
+                className={classes.li}
+                key={chat.chatId}
+              />
+            );
+        })}
       </ul>
     </aside>
   );

@@ -29,7 +29,7 @@ export const createGroupChat = async (
   adminId: string,
   groupName: string,
   participants: string[],
-  photoURL: string
+  photoURL: string | null
 ) => {
   const chatsCollectionRef = collection(db, "groupChats");
   const responseCreatedChat = await addDoc(chatsCollectionRef, {

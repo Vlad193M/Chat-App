@@ -79,8 +79,8 @@ export const addNewGroupChatToUsers =
   (
     userId: string,
     participants: string[],
-    photoURL: string,
-    groupName: string
+    photoURL: string | null,
+    groupName: string,
   ) =>
   async (dispatch: AppDispatch) => {
     dispatch(setLoading(true));
