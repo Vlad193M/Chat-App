@@ -13,19 +13,21 @@ import {
 } from "../../store/user-chats/user-chats-actions";
 import ChatHeaderForm from "../UI/ChatHeaderForm/ChatHeaderForm";
 
-interface ChatHeaderProps {
+interface SidebarHeaderProps {
   show: string;
-  setShow: (value: React.SetStateAction<string>) => void;
+  setShow: (
+    value: React.SetStateAction<"group" | "direct" | "actions" | "">
+  ) => void;
   selectedUsers: string[];
   setSelectedUsers: (value: React.SetStateAction<string[]>) => void;
 }
 
-const ChatHeader = ({
+const SidebarHeader = ({
   show,
   setShow,
   selectedUsers,
   setSelectedUsers,
-}: ChatHeaderProps) => {
+}: SidebarHeaderProps) => {
   const [enteredValue, setEnteredValue] = useState("");
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
@@ -59,8 +61,8 @@ const ChatHeader = ({
     await dispatch(
       addNewGroupChatToUsers(user.uid, participants, null, enteredValue)
     );
-    
-    setShow("")
+
+    setShow("");
     setEnteredValue(" ");
   };
 
@@ -128,4 +130,4 @@ const ChatHeader = ({
   );
 };
 
-export default ChatHeader;
+export default SidebarHeader;

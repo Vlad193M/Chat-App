@@ -118,7 +118,13 @@ export const downloadPrevMessages =
           throw new Error(`Невідомий тип чату: ${chatType}`);
       }
 
-      const lastDocRef = doc(db, chatCollectionName, chatId, "messages", lastDocId);
+      const lastDocRef = doc(
+        db,
+        chatCollectionName,
+        chatId,
+        "messages",
+        lastDocId
+      );
       const lastDocSnap = await getDoc(lastDocRef);
 
       const messagesCollectionRef = collection(
@@ -173,7 +179,13 @@ export const downloadPrevMessages =
   };
 
 export const sendMessage =
-  (chatId: string, senderId: string, text: string) =>
+  (
+    chatId: string,
+    senderId: string,
+    senderName: string,
+    senderPhotoURL: string,
+    text: string
+  ) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(setLoading(true));
 
@@ -200,6 +212,8 @@ export const sendMessage =
       const newMessage = {
         chatId,
         senderId,
+        senderName,
+        senderPhotoURL,
         text,
         createdAt: Date.now(),
       };

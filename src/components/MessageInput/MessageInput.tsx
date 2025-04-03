@@ -13,14 +13,17 @@ const MessageInput = ({ className }: MessageInputProps) => {
   const dispatch = useAppDispatch();
   const chatId = useAppSelector((state) => state.chatMessages.chatId);
   const chats = useAppSelector((state) => state.userChats.chats);
-  const user = useAppSelector((state) => state.auth.user);
+  const userAuth = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector((state) => state.user.user);
 
   const [message, setMessage] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const currentChatData = chats.find((chat) => chat.chatId === chatId);
-  const receiverId = currentChatData?.participants.find(id => user?.uid !== id)
+  const receiverId = currentChatData?.participants.find(
+    (id) => userAuth?.uid !== id
+  );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
@@ -30,11 +33,23 @@ const MessageInput = ({ className }: MessageInputProps) => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-      
+
     event.preventDefault();
-    if (message.trim() && user && user.uid && chatId && currentChatData && receiverId) {
-      dispatch(sendMessage(chatId, user.uid, message));
-      setLastMessageToUserChat(user.uid, chatId, message);
+    if (
+      message.trim() &&
+      user &&
+      user.name &&
+      user.photoURL &&
+      userAuth &&
+      userAuth.uid &&
+      chatId &&
+      currentChatData &&
+      receiverId
+    ) {
+      dispatch(
+        sendMessage(chatId, userAuth.uid, user.name, user.photoURL, message)
+      );
+      setLastMessageToUserChat(userAuth.uid, chatId, message);
       setLastMessageToUserChat(receiverId, chatId, message);
       console.log("Message sent:", message);
     }

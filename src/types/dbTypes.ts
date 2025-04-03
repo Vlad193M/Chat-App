@@ -33,8 +33,9 @@ export type GroupChatType = {
 
 export type MessageType = {
   chatId: string;
-  senderId: string;
-  text: string;
-  image: string;
   createdAt: number;
+  senderId: string;
+  senderName: string;
+  senderPhotoURL: string; 
+  text: string;
 };

@@ -1,10 +1,7 @@
 .aside {
-  position: relative;
   display: flex;
   flex-direction: column;
-  /* gap: 0.5rem; */
   background-color: var(--sp-blue-700);
-  /* padding: 0.5rem; */
 }
 
 .ul {
@@ -14,6 +11,3 @@
   gap: 0.5rem;
   overflow-y: auto;
 }
-
-/* .li {
-} */

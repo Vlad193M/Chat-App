@@ -1,6 +1,6 @@
 import defaultAvatar from "../../assets/default-avatar2.jpg";
 import ChatItem from "../ChatItem/ChatItem";
-import ChatHeader from "../SidebarHeader/SidebarHeader";
+import SidebarHeader from "../SidebarHeader/SidebarHeader";
 
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
@@ -19,9 +19,8 @@ interface ChatSidebarProps {
 }
 
 const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
-  const [show, setShow] = useState("");
+  const [show, setShow] = useState<"group" | "direct" | "actions" | "">("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-
   const chats = useAppSelector((state) => state.userChats.chats);
   const chatsLoading = useAppSelector((state) => state.userChats.loading);
   const chatId = useAppSelector((state) => state.chatMessages.chatId);
@@ -65,23 +64,21 @@ const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
 
   return (
     <aside className={`${classes.aside} ${className}`}>
-      <ChatHeader
+      <SidebarHeader
         show={show}
         setShow={setShow}
         selectedUsers={selectedUsers}
         setSelectedUsers={setSelectedUsers}
       />
-      <ClipLoader
-        cssOverride={{
-          position: "absolute",
-          left: "50%",
-          top: "5rem",
-        }}
-        size={16}
-        color="#363f54"
-        loading={chatsLoading}
-      />
       <ul className={classes.ul}>
+        <ClipLoader
+          cssOverride={{
+            margin: "0 auto",
+          }}
+          size={16}
+          color="#363f54"
+          loading={chatsLoading}
+        />
         {chats.map((chat) => {
           if (show === "group" && chat.chatType === ChatType.DIRECT)
             return (
@@ -102,7 +99,6 @@ const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
                   name={chat.name}
                   text={chat.lastMessage}
                   updatedAt={chat.updatedAt}
-                  className={classes.li}
                 />
               </ChatItemCheckbox>
             );
@@ -120,7 +116,6 @@ const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
                 name={chat.name}
                 text={chat.lastMessage}
                 updatedAt={chat.updatedAt}
-                className={classes.li}
                 key={chat.chatId}
               />
             );

@@ -14,7 +14,7 @@ export const subscribeToUserData =
     const unsubscribe = onSnapshot(
       userChatsCollectionRef,
       async (docSnap) => {
-        if (!docSnap.exists) {
+        if (docSnap.exists()) {
           const userData = docSnap.data() as UserType;
 
           dispatch(setUser(userData));
